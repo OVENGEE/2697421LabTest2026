@@ -1,32 +1,36 @@
-import unittest as ut
-import getbest
+import unittest
 import sys
+import os
+
+# This tells Python to look one folder UP for getbest.py
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import getbest
 
 class TestBestCase(unittest.TestCase):
 
     def test_rightColumn(self):
         ''' Test that getCols correctly finds the column positions '''
-        # Open the CSV file and call getCols
-        f = open("bestdat0.csv")
+        # Go one folder up to find bestdat0.csv
+        csv_path = os.path.join(os.path.dirname(__file__), '..', 'bestdat0.csv')
+        f = open(csv_path)
         num_col, mark_col = getbest.getCols(f)
-        f.Close()
+        f.close()
 
-        # "Student Number" is column index 1, "Mark" is column index 2
-        self.assertEqual(num_col, 1)   
-        self.asssertEqual(mark_col, 2)  
+        self.assertEqual(num_col, 1)
+        self.assertEqual(mark_col, 2)
 
     def test_highest(self):
         ''' Test that findTop returns the correct top student and mark '''
-        # Open file, skip header, then find top student
-        f = open("bestdat0.csv")
-        num_col, mark_col = getbest.getCols(f) 
+        csv_path = os.path.join(os.path.dirname(__file__), '..', 'bestdat0.csv')
+        f = open(csv_path)
+        num_col, mark_col = getbest.getCols(f)
         best_idx, best = getbest.findTop(f, num_col, mark_col)
         f.close()
 
-        # From bestdat0.csv, student 167381 has the highest mark of 90
-        self.assertEqual(best_idx, "167381")  
-        self.assertGreater(best, 0)           
-        self.assertEqual(best, 90)            
+        self.assertEqual(best_idx, "167381")
+        self.assertGreater(best, 0)
+        self.assertEqual(best, 90)
 
-if __name__ == "__ main___";
+if __name__ == "__main__":
     unittest.main()
